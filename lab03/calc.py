@@ -1,5 +1,3 @@
-def sum(a, b):
-    return a + b
-
-z = sum(3, 2)
-print(z)
+a = int(input('a = '))
+b = int(input('b = '))
+print(f'{a} + {b} =', a+b)
