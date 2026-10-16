@@ -1,16 +1,27 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import sys
+from stats import average_by_city, read_valid, warmest_city
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def main():
+    # Читаем все строки из стандартного ввода
+    lines = sys.stdin.read().splitlines()
+
+    # Обрабатываем строки
+    valid_records = read_valid(lines)
+    errors_count = getattr(read_valid, 'invalid_count', 0)
+
+    # Вычисляем финальные метрики
+    averages = average_by_city(valid_records)
+    best_city = warmest_city(valid_records)
+
+    # Извлекаем температуру самого теплого города
+    best_temp = averages.get(best_city, 0.0)
+
+    # Печать строго в три строки, как требует условие
+    print(len(valid_records))
+    print(errors_count)
+    print(f"{best_temp:.1f}")
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+if __name__ == "__main__":
+    main()
