@@ -18,3 +18,27 @@ def parse_record(line: str) -> dict:
         temp = float(temp_str)
     except ValueError:
         raise ValueError(f"Некорректное значение температуры: '{temp_str}' не является числом")
+
+def read_valid(lines: list[str]) -> tuple[list[dict], int]:
+    """
+    Разбирает список строк. Пустые строки игнорирует.
+    Возвращает список корректных записей и счетчик испорченных строк.
+    """
+    valid_records = []
+    errors_count = 0
+
+    for line in lines:
+        # Пропускаем пустые строки (или строки, состоящие только из пробелов)
+        if not line.strip():
+            continue
+
+        try:
+            record = parse_record(line)
+            valid_records.append(record)
+        except ValueError:
+            errors_count += 1
+
+        return valid_records, errors_count
+
+
+
