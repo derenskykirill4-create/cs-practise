@@ -1,6 +1,7 @@
 import sys
 from stats import read_valid, average_by_city, warmest_city
 
+
 def main():
     lines = sys.stdin.read().splitlines()
     non_empty = [line for line in lines if line.strip() != '']
@@ -16,6 +17,8 @@ def main():
     else:
         print("0.0")
 
+
 if __name__ == "__main__":
     main()
+
 
