@@ -1,4 +1,3 @@
-
 def parse_record(line: str) -> dict:
     parts = line.split(';')
     if len(parts) != 3:
@@ -13,7 +12,7 @@ def parse_record(line: str) -> dict:
     try:
         temperature = float(temp)
     except ValueError:
-        raise ValueError(f'Температура не число: {temp!r}')
+        raise ValueError('Неправильна темпер')
     return {'city': city, 'temperature': temperature, 'date': date}
 
 def read_valid(lines: list[str]) -> list[dict]:
@@ -45,6 +44,3 @@ def warmest_city(records: list[dict]) -> str:
         if best is None or averages[city] > averages[best]:
             best = city
     return best
-
-    
-
