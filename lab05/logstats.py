@@ -1,26 +1,23 @@
-# Разрешенные уровни логирования
-VALID_LEVELS = {"INFO", "ERROR", "BROKEN", "WARNING"}
+import collections
+
+VALID_LEVELS = {"DEBUG", "INFO", "WARNING", "ERROR"}
 
 
 def parse_event(line: str) -> dict:
-    """
-    Разбирает строку журнала «время уровень сообщение» в словарь.
-    Если строка негодная, выбрасывает ValueError.
+    """Разбирает строку журнала на компоненты.
+    Если строка некорректна, генерирует ValueError.
     """
     line = line.strip()
     if not line:
         raise ValueError("Пустая строка")
 
-    # Разделяем строку максимум на 3 части по пробелам
+    # Разделяем максимум на 3 части (время, уровень, сообщение)
     parts = line.split(maxsplit=2)
-
-    # Если частей меньше 3, значит отсутствует сообщение или уровень
     if len(parts) < 3:
-        raise ValueError("Недостаточно элементов в строке лога")
+        raise ValueError("Строка содержит недостаточно элементов")
 
     time, level, message = parts
 
-    # Проверяем корректность уровня
     if level not in VALID_LEVELS:
         raise ValueError(f"Неизвестный уровень логирования: {level}")
 
@@ -28,11 +25,12 @@ def parse_event(line: str) -> dict:
 
 
 def count_levels(lines) -> dict:
+    """Считает количество строк каждого уровня.
+    Испорченные строки учитывает под ключом BROKEN.
     """
-    Считает количество строк каждого уровня.
-    Испорченные строки учитываются под ключом BROKEN. Пустые пропускаются.
-    """
-    counts = {"INFO": 0, "ERROR": 0, "BROKEN": 0, "WARNING": 0}
+    # Инициализируем словарь со всеми возможными уровнями и BROKEN
+    counts = {level: 0 for level in VALID_LEVELS}
+    counts["BROKEN"] = 0
 
     for line in lines:
         cleaned = line.strip()
@@ -48,11 +46,10 @@ def count_levels(lines) -> dict:
 
 
 def top_errors(lines, n: int) -> list[list]:
+    """Возвращает n самых частых сообщений уровня ERROR.
+    При равенстве частоты сортирует по алфавиту.
     """
-    Возвращает n самых частых сообщений уровня ERROR: пары [сообщение, сколько раз].
-    При равенстве частоты — сортировка по алфавиту сообщения.
-    """
-    error_counts = {}
+    error_counts = collections.Counter()
 
     for line in lines:
         cleaned = line.strip()
@@ -61,32 +58,28 @@ def top_errors(lines, n: int) -> list[list]:
         try:
             event = parse_event(cleaned)
             if event["level"] == "ERROR":
-                msg = event["message"]
-                error_counts[msg] = error_counts.get(msg, 0) + 1
+                error_counts[event["message"]] += 1
         except ValueError:
-            continue  # Пропускаем битые строки
+            continue  # Игнорируем битые строки для подсчета ошибок
 
     # Сортировка: сначала по убыванию частоты (-x[1]), затем по алфавиту (x[0])
     sorted_errors = sorted(error_counts.items(), key=lambda x: (-x[1], x[0]))
 
-    # Преобразуем кортежи в списки и берем первые n элементов
+    # Преобразуем кортежи в списки списков, как требуется в условии
     return [list(item) for item in sorted_errors[:n]]
 
 
 def format_report(counts: dict, errors: list[list]) -> str:
-    """
-    Формирует финальный текст отчёта.
-    Уровни выводятся строго по алфавиту. В конце текста — перевод строки.
-    """
-    lines = ["Отчёт по журналу"]
+    """Формирует финальный текстовый отчёт."""
+    report_lines = ["Отчёт по журналу", ""]
 
-    # Сортируем ключи словаря counts по алфавиту (BROKEN, DEBUG, ERROR, INFO, WARNING)
+    # Уровни сортируем по алфавиту (BROKEN, DEBUG, ERROR, INFO, WARNING)
     for level in sorted(counts.keys()):
-        lines.append(f"{level}: {counts[level]}")
+        report_lines.append(f"{level}: {counts[level]}")
 
-    lines.append("Частые ошибки:")
+    report_lines.extend(["", "Частые ошибки:"])
     for msg, count in errors:
-        lines.append(f"- {msg} — {count}")
+        report_lines.append(f"- {msg} — {count}")
 
-    # Объединяем строки и добавляем перевод строки в самом конце файла
-    return "\n".join(lines) + "\n"
+    # В конце текста обязательно должен быть перевод строки
+    return "\n".join(report_lines) + "\n"
