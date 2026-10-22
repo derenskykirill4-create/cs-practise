@@ -1,5 +1,5 @@
 # Разрешенные уровни логирования
-VALID_LEVELS = {"DEBUG", "INFO", "WARNING", "ERROR"}
+VALID_LEVELS = {"INFO", "ERROR", "BROKEN", "WARNING"}
 
 
 def parse_event(line: str) -> dict:
@@ -32,7 +32,7 @@ def count_levels(lines) -> dict:
     Считает количество строк каждого уровня.
     Испорченные строки учитываются под ключом BROKEN. Пустые пропускаются.
     """
-    counts = {"DEBUG": 0, "INFO": 0, "WARNING": 0, "ERROR": 0, "BROKEN": 0}
+    counts = {"INFO": 0, "ERROR": 0, "BROKEN": 0, "WARNING": 0}
 
     for line in lines:
         cleaned = line.strip()
