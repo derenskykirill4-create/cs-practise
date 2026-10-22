@@ -25,22 +25,18 @@ def parse_event(line: str) -> dict:
 
 
 def count_levels(lines) -> dict:
-    """Считает количество строк каждого уровня.
-    Испорченные строки учитывает под ключом BROKEN.
-    """
-    # Инициализируем словарь со всеми возможными уровнями и BROKEN
-    counts = {level: 0 for level in VALID_LEVELS}
-    counts["BROKEN"] = 0
+    counts = {}
 
     for line in lines:
-        cleaned = line.strip()
-        if not cleaned:  # Пропускаем пустые строки
+        # Пропускаем пустые строки и строки, состоящие только из пробелов
+        if not line.strip():
             continue
         try:
-            event = parse_event(cleaned)
-            counts[event["level"]] += 1
+            event = parse_event(line)
+            level = event["level"]
+            counts[level] = counts.get(level, 0) + 1
         except ValueError:
-            counts["BROKEN"] += 1
+            counts["BROKEN"] = counts.get("BROKEN", 0) + 1
 
     return counts
 
