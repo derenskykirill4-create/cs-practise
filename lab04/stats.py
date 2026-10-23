@@ -8,8 +8,8 @@ def parse_record(line: str) -> dict:
     date = date.strip()
     if city == '' or date == '':
         raise ValueError(f'Пустое поле города или даты: {line!r}')
-    temp = temp_str.replace(',', '.')
     try:
+        temp = temp_str.replace(',', '.')
         temperature = float(temp)
     except ValueError:
         raise ValueError(f'Температура не число: {temp!r}')
