@@ -12,7 +12,7 @@ def main():
 
     if valid_records:
         avg_temp = average_by_city(valid_records)
-        print(f"{avg_temp[warmest_city(records)]:.1f}")
+        print(f"{avg_temp[warmest_city(valid_records)]:.1f}")
     else:
         print("0.0")
 
