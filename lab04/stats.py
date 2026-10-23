@@ -5,14 +5,14 @@ def parse_record(line: str) -> dict:
     city, temp_str, date = parts
     city = city.strip()
     temp_str = temp_str.strip()
-    date = city.strip()
+    date = date.strip()
     if city == '' or date == '':
         raise ValueError(f'Пустое поле города или даты: {line!r}')
     temp = temp_str.replace(',', '.')
     try:
         temperature = float(temp)
     except ValueError:
-        raise ValueError('Неправильна темпер')
+        raise ValueError(f'Температура не число: {temp!r}')
     return {'city': city, 'temperature': temperature, 'date': date}
 
 def read_valid(lines: list[str]) -> list[dict]:
@@ -33,7 +33,7 @@ def average_by_city(records: list[dict]) -> dict:
     for record in records:
         total[record['city']] = total.get(record['city'], 0) + record['temperature']
         count[record['city']] = count.get(record['city'], 0) + 1
-    return {city: round(total['city'] / count['city'], 1) for city in total}
+    return {city: round(total[city] / count[city], 1) for city in total}
 
 def warmest_city(records: list[dict]) -> str:
     averages = average_by_city(records)
