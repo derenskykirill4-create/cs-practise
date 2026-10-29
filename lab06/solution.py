@@ -28,23 +28,23 @@ def deepest_path(paths: list[str]) -> str:
     return deep
 
 
-def human_size(size_bytes: int) -> str:
-    if size_bytes == 0:
+def human_size(n_bytes: int) -> str:
+    if n_bytes == 0:
         return "0 Б"
 
-    labels = ["Б", "КБ", "МБ", "ГБ", "ТБ", "ПБ"]
-    size = float(size_bytes)
-    idx = 0
+    suffixes = ["Б", "КБ", "МБ", "ГБ", "ТБ", "ПБ"]
+    n_bytes = float(n_bytes)
+    i = 0
 
     # Переводим в нужную единицу измерения
-    while size >= 1024 and idx < len(labels) - 1:
-        size /= 1024.0
-        idx += 1
+    while n_bytes >= 1024 and idx < len(suffixes) - 1:
+        n_bytes = n_bytes / 1024.0
+        i += 1
 
     # Если единица измерения - Байты (Б), форматируем как целое число
-    if idx == 0:
-        return f"{int(size)} Б"
+    if i == 0:
+        return f"{int(n_bytes)} Б"
 
     # Для всех остальных (КБ, МБ, ГБ...) - всегда 1 знак после запятой (например, 5.0 МБ)
-    return f"{size:.1f} {labels[idx]}"
+    return f"{n_bytes:.1f} {suffixes[i]}"
 
