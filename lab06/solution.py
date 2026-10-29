@@ -35,6 +35,6 @@ def human_size(n_bytes: int) -> str:
         n_bytes = n_bytes / 1024
         i = i + 1
         if n_bytes.is_integer(): # Если найдётся хотя бы одно целое число, то хаписываем его без '.0'
-            n_bytes = int(n_bytes)
+            print('%d %s' % (n_bytes, suffixes[i]))
     return '%.1f %s' % (n_bytes, suffixes[i])
 
