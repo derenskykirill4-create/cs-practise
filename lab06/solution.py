@@ -31,6 +31,7 @@ def deepest_path(paths: list[str]) -> str:
 def human_size(n_bytes: int) -> str:
     suffixes = ['Б', 'КБ', 'МБ', 'ГБ', 'ТБ']
     i = 0
+    n_bytes = float(n_bytes)
     while n_bytes >= 1024 and i < len(suffixes) - 1:
         n_bytes = n_bytes / 1024
         i = i + 1
