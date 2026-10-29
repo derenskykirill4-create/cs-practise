@@ -5,9 +5,10 @@ def count_by_extension(paths: list[str]) -> dict[str, int]:
     extensions = {} # используем словарь для нахождения расширения файлов
     for p in paths:
         p = Path(p) # разбиваем каждый путь на части
-        ext = p.suffix
+        ext = p.suffix.lower().lstrip('.')
         if p.name.startswith('.'): # с помощью метода .name ищем имена, где есть расширение
             ext = ''
+
 
         extensions[ext] = extensions.get(ext, 0) + 1
     return extensions
@@ -34,5 +35,5 @@ def human_size(n_bytes: int) -> str:
         n_bytes = n_bytes / 1024
         i = i + 1
 
-    return '%3.1f %s' % (n_bytes, suffixes[i])
+    return '%.1f %s' % (n_bytes, suffixes[i])
 
