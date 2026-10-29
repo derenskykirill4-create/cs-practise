@@ -27,7 +27,30 @@ def deepest_path(paths: list[str]) -> str:
                 deep = p # запоминаем глубину
     return deep
 
-def human_size(n_bytes: int) -> str:
+
+def human_size(size_bytes: int) -> str:
+    if size_bytes == 0:
+        return "0 Б"
+
+    labels = ["Б", "КБ", "МБ", "ГБ", "ТБ", "ПБ"]
+    size = float(size_bytes)
+
+    # Делим на 1024, пока размер больше или равен 1024
+    # Но для байт (labels[0]) деление не должно происходить, если размер < 1024
+    idx = 0
+    while size >= 1024 and idx < len(labels) - 1:
+        size /= 1024.0
+        idx += 1
+
+    # Округляем до 1 знака после запятой
+    size = round(size, 1)
+
+    # Убираем .0, если число целое
+    if size.is_integer():
+        return f"{int(size)} {labels[idx]}"
+
+    return f"{size} {labels[idx]}"
+'''def human_size(n_bytes: int) -> str:
     suffixes = ['Б', 'КБ', 'МБ', 'ГБ', 'ТБ'] # выписываем все обозначения
     i = 0
     while n_bytes >= 1024 and i < len(suffixes) - 1:  # Проверяем, чтобы число было больше 1024 и
@@ -36,5 +59,6 @@ def human_size(n_bytes: int) -> str:
         i = i + 1
         if n_bytes.is_integer(): # Если найдётся хотя бы одно целое число, то хаписываем его без '.0'
             print('%d %s' % (n_bytes, suffixes[i]))
-    return '%.1f %s' % (n_bytes, suffixes[i])
+            
+    return '%.1f %s' % (n_bytes, suffixes[i])'''
 
