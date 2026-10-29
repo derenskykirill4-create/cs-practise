@@ -37,7 +37,7 @@ def human_size(n_bytes: int) -> str:
     i = 0
 
     # Переводим в нужную единицу измерения
-    while n_bytes >= 1024 and idx < len(suffixes) - 1:
+    while n_bytes >= 1024 and i < len(suffixes) - 1:
         n_bytes = n_bytes / 1024.0
         i += 1
 
