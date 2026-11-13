@@ -44,7 +44,7 @@ def parse_settings(lines: list[str]) -> dict:
                 val = int(val)
             else:
                 try:
-                    val = float(val.replace(",", "."))
+                    val = float(val)
                 except ValueError:
                     pass
 
@@ -72,7 +72,7 @@ def parse_settings(lines: list[str]) -> dict:
                     val = int(val)
                 else:
                     try:
-                        val = float(val.replace(",", "."))
+                        val = float(val)
                     except ValueError:
                         pass
 
