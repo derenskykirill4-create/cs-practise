@@ -38,15 +38,13 @@ def parse_settings(lines: list[str]) -> dict:
                 val = True
             elif low in ("false", "no"):
                 val = False
+            elif val.isdigit() or (val.startswith("-") and val[1:].isdigit()):
+                val = int(val)
             else:
                 try:
-                    val = int(val)
+                    val = float(val)
                 except ValueError:
-                    if low not in ("nan", "inf", "+inf", "-inf", "infinity", "+infinity", "-infinity"):
-                        try:
-                            val = float(val)
-                        except ValueError:
-                            pass
+                    pass
 
             if current_list is not None:
                 settings[current_list].append(val)
@@ -66,15 +64,13 @@ def parse_settings(lines: list[str]) -> dict:
                     val = True
                 elif low in ("false", "no"):
                     val = False
+                elif val.isdigit() or (val.startswith("-") and val[1:].isdigit()):
+                    val = int(val)
                 else:
                     try:
-                        val = int(val)
+                        val = float(val)
                     except ValueError:
-                        if low not in ("nan", "inf", "+inf", "-inf", "infinity", "+infinity", "-infinity"):
-                            try:
-                                val = float(val)
-                            except ValueError:
-                                pass
+                        pass
 
                 settings[key] = val
                 current_list = None
