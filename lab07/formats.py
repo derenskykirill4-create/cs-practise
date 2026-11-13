@@ -17,6 +17,7 @@ def csv_to_records(text: str) -> list[dict]:
         for i in range(len(headers)):
             row[headers[i]] = values[i]
         records.append(row)
+        
 
     return records
 
