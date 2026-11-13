@@ -6,7 +6,7 @@ def csv_to_records(text: str) -> list[dict]:
     if not lines:
         return []
 
-    headers = lines[0].split(",")
+    headers = [h.strip() for h in lines[0].split(",")]
     records = []
 
     for line in lines[1:]:
@@ -44,7 +44,7 @@ def parse_settings(lines: list[str]) -> dict:
                 val = int(val)
             else:
                 try:
-                    val = float(val)
+                    val = float(val.replace(",", "."))
                 except ValueError:
                     pass
 
