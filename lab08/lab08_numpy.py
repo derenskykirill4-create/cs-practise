@@ -88,3 +88,7 @@ transposed = table.T
 print(numbers.shape)  # (12,)
 print(table.shape)  # (3, 4)
 print(transposed.shape)  # (4, 3)
+
+
+
+
