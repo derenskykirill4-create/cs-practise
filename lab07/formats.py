@@ -26,12 +26,10 @@ def parse_settings(lines: list[str]) -> dict:
     current_list = None
 
     for raw_line in lines:
-        # Убираем комментарий после # и лишние пробелы
         line = raw_line.split("#", 1)[0].strip()
         if not line:
             continue
 
-        # Если строка начинается с '-', это элемент списка
         if line.startswith("-"):
             val = line[1:].strip()
             low = val.lower()
@@ -40,26 +38,26 @@ def parse_settings(lines: list[str]) -> dict:
                 val = True
             elif low in ("false", "no"):
                 val = False
-            elif val.isdigit() or (val.startswith("-") and val[1:].isdigit()):
-                val = int(val)
             else:
                 try:
-                    val = float(val)
+                    val = int(val)
                 except ValueError:
-                    pass
+                    if low not in ("nan", "inf", "+inf", "-inf", "infinity", "+infinity", "-infinity"):
+                        try:
+                            val = float(val)
+                        except ValueError:
+                            pass
 
             if current_list is not None:
                 settings[current_list].append(val)
             continue
 
-        # Иначе это строка формата «ключ: значение»
         if ":" in line:
             key, val = line.split(":", 1)
             key = key.strip()
             val = val.strip()
 
             if val == "":
-                # Пустое значение открывает список
                 settings[key] = []
                 current_list = key
             else:
@@ -68,13 +66,15 @@ def parse_settings(lines: list[str]) -> dict:
                     val = True
                 elif low in ("false", "no"):
                     val = False
-                elif val.isdigit() or (val.startswith("-") and val[1:].isdigit()):
-                    val = int(val)
                 else:
                     try:
-                        val = float(val)
+                        val = int(val)
                     except ValueError:
-                        pass
+                        if low not in ("nan", "inf", "+inf", "-inf", "infinity", "+infinity", "-infinity"):
+                            try:
+                                val = float(val)
+                            except ValueError:
+                                pass
 
                 settings[key] = val
                 current_list = None
